@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": false,
+    "module": "es2015",
+    "target": "es5",
+    "moduleResolution": "Node",
+    "outDir": "C:/Users/Julia/AppData/Local/Screeps/scripts/127_0_0_1___21025/main",
+    "baseUrl": "src/",
+    "sourceMap": true,
+    "strict": true,
+    "experimentalDecorators": true,
+    "noImplicitReturns": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "tslint.alwaysShowRuleFailuresAsWarnings":true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

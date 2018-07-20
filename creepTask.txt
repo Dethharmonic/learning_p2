@@ -1,0 +1,8 @@
+declare const enum CreepTask {
+    IDLE,
+    HARVEST,
+    UPGRADE,
+    GET_RESOURCES_FROM_STORAGE,
+    BUILD,
+    REPAIRING
+}
