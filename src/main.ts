@@ -22,7 +22,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
 });
 
 export function countMyCreeps(): void {
-  CashedCreepsTool.cashedCreeps.initialize();
+  //CashedCreepsTool.cashedCreeps.initialize();
   for (const name in Game.creeps) {
     const creep = Game.creeps[name];
     if (creep.my && creep.memory.role) {
@@ -32,6 +32,9 @@ export function countMyCreeps(): void {
 }
 
 export function clearUnusedMemory() {
+  // clear count
+  CashedCreepsTool.cashedCreeps.clearCash();
+  // .memory
   for (const name in Memory.creeps) {
     if (!(name in Game.creeps)) {
       delete Memory.creeps[name];
@@ -40,7 +43,7 @@ export function clearUnusedMemory() {
 }
 
 export function spawnersBehavior() {
-  CashedCreepsTool.supportedRoles().forEach((role) => {
+  CashedCreepsTool.cashedCreeps.supportedRoles.forEach((role) => {
     const arrayRef = CashedCreepsTool.cashedCreeps.getByRole(role);
     if (arrayRef && arrayRef.length < CashedCreepsTool.getRequirements(role.objectRoleName)) {
       spawnNewWorker(role);
@@ -92,8 +95,8 @@ export function spawnCreepWithRole(spawner: StructureSpawn, creepRole: CreepRole
     return false;
   }
 }
-export function harvesterBehavior() {
-  const creeps: Creep[] = CashedCreepsTool.cashedCreeps.getByRole(CreepRole.HARVESTER1);
+export function harvesterBehavior(role: CreepRole) {
+  const creeps: Creep[] = CashedCreepsTool.cashedCreeps.getByRole(role);
   if (!creeps || creeps.length === 0) {
     return;
   }
@@ -124,8 +127,8 @@ export function harvesterBehavior() {
   });
 }
 
-export function upgraderBehavior() {
-  const creeps: Creep[] = CashedCreepsTool.cashedCreeps.getByRole(CreepRole.UPGRADER1);
+export function upgraderBehavior(role: CreepRole) {
+  const creeps: Creep[] = CashedCreepsTool.cashedCreeps.getByRole(role);
   if (!creeps || creeps.length === 0) {
     return;
   }
@@ -169,8 +172,8 @@ export function upgraderBehavior() {
   });
 }
 
-export function builderBehavior() {
-  const creeps: Creep[] = CashedCreepsTool.cashedCreeps.getByRole(CreepRole.BUILDER1);
+export function builderBehavior(role: CreepRole) {
+  const creeps: Creep[] = CashedCreepsTool.cashedCreeps.getByRole(role);
   if (!creeps || creeps.length === 0) {
     return;
   }
@@ -213,14 +216,15 @@ export function builderBehavior() {
 
   });
 }
-export function haulerBehavior() {
-  const creeps: Creep[] = CashedCreepsTool.cashedCreeps.getByRole(CreepRole.HAULER1);
+export function haulerBehavior(role: CreepRole) {
+  const creeps: Creep[] = CashedCreepsTool.cashedCreeps.getByRole(role);
   if (!creeps || creeps.length === 0) {
     return;
   }
   creeps.forEach((creep) => {
-    if (creep.carry.energy < creep.carryCapacity && creep.memory.task !== CreepTask.TRASFER_RESOURCES) {
+    if (creep.carry.energy < creep.carryCapacity && creep.memory.task !== CreepTask.TRANSFER_RESOURCES) {
       //const storage = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
+
       const storage = findStorage(creep, true, true);
       if (storage) {
         creep.memory.task = CreepTask.GET_RESOURCES_FROM_STORAGE;
@@ -233,7 +237,7 @@ export function haulerBehavior() {
     } else {
       const storage = findStorage(creep, false, true);
       if (storage) {
-        creep.memory.task = CreepTask.TRASFER_RESOURCES;
+        creep.memory.task = CreepTask.TRANSFER_RESOURCES;
         if (creep.transfer(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
           creep.moveTo(storage);
         }
@@ -259,25 +263,25 @@ export function showStats() {
 export function findStorage(creep: Creep, resourceIsNeeded: boolean, isRefilling?: boolean): Structure {
   const findContainer = () => {
     return creep.pos.findClosestByRange(FIND_STRUCTURES, {
-      filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
+      filter: (i) => i.structureType === STRUCTURE_CONTAINER &&
         (resourceIsNeeded ? i.store[RESOURCE_ENERGY] > 0 : i.store[RESOURCE_ENERGY] < i.storeCapacity)
 
     });
-  }
+  };
   const findSpawner = () => {
     return creep.pos.findClosestByRange(FIND_MY_SPAWNS, {
       filter: (i) => (resourceIsNeeded ? i.energy > 0 : i.energy < i.energyCapacity)
     });
-  }
+  };
   const findExtension = () => {
     return creep.pos.findClosestByRange(FIND_STRUCTURES, {
       filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
         (resourceIsNeeded ? i.energy > 0 : i.energy < i.energyCapacity)
     });
-  }
-  let spawn:Structure
-  let container:Structure;
-  let extension:Structure;
+  };
+  let spawn: Structure;
+  let container: Structure;
+  let extension: Structure;
   if (!isRefilling) {
     container = findContainer();
     spawn = findSpawner();
@@ -286,7 +290,6 @@ export function findStorage(creep: Creep, resourceIsNeeded: boolean, isRefilling
     resourceIsNeeded ? container = findContainer() : (spawn = findSpawner(), extension = findExtension());
     return findMinimumDistance(creep, [spawn, container, extension]);
   }
-
 
 }
 export function findMinimumDistance(creep: Creep, targets: Structure[]): Structure {

@@ -3,31 +3,16 @@ import { CashedCreepsTool } from "tools/cashed-creeps-tool";
 
 export class CashedCreeps {
     [key: string]: any;
-   /* private harvesters: Creep[] = [];
-    private upgraders: Creep[] = [];
-    private builders: Creep[] = [];
-    private haulers: Creep[] = [];*/
+    supportedRoles: CreepRole[];
+    constructor() {
+        this.supportedRoles = CashedCreeps.getSupportedRoles();
+        this.initialize();
+    }
     public initialize() {
         this.clearCash();
     }
     public getByRole(role: CreepRole): Creep[] {
-        /*switch (role.objectClassId) {
-            case CreepRole.HARVESTER1.objectClassId: {
-                return this.harvesters;
-            }
-            case CreepRole.UPGRADER1.objectClassId: {
-                return this.upgraders;
-            }
-            case CreepRole.BUILDER1.objectClassId: {
-                return this.builders;
-            }
-            case CreepRole.BUILDER1.objectClassId: {
-                return this.haulers;
-            }
-            default: {
-                return null;
-            }
-        }*/
+
         return this[role.objectRoleName];
     }
     public getByRoleName(roleName: string): Creep[] {
@@ -35,16 +20,14 @@ export class CashedCreeps {
     }
     public getTotalCreepsCount(): string {
         let msg: string = 'Total creeps count: ';
-        /*CreepRole.SUPPORTEDROLE.forEach((role) => {
-            msg += role.objectRoleName + ':' + this.getByRole(role).length + '; ';
-        });*/
-        CashedCreepsTool.supportedRoles().forEach((role) => {
+
+        this.supportedRoles.forEach((role) => {
             msg += role.objectRoleName + ':' + this.getByRole(role).length + '; ';
         });
         return msg;
     }
     public clearCash() {
-        CashedCreepsTool.supportedRoles().forEach((role) => {
+        this.supportedRoles.forEach((role) => {
             this[role.objectRoleName] = [];
         });
     }
@@ -54,5 +37,15 @@ export class CashedCreeps {
             arrayRef.push(creep);
         }
 
+    }
+    public static readonly getSupportedRoles = () => {
+        const roles = [];
+        for (const key in CashedCreepsTool.requiredCount) {
+            const role: CreepRole = CreepRole.getRoleByName(key);
+            if (role) {
+                roles.push(role);
+            }
+        }
+        return roles;
     }
 }
