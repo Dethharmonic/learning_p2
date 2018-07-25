@@ -17,13 +17,13 @@ if (!dest) {
 export default {
   input: "src/main.ts",
   output: {
-    file: "C:/Users/Julia/AppData/Local/Screeps/scripts/127_0_0_1___21025/main/main.js",
+    file: "C:/Users/Dethharmonic/AppData/Local/Screeps/scripts/127_0_0_1___21025/main/main.js",
     format: "cjs",
     sourcemap: true
   },
 
   plugins: [
-    clear({ targets: ["C:/Users/Julia/AppData/Local/Screeps/scripts/127_0_0_1___21025/main"] }),
+    clear({ targets: ["C:/Users/Dethharmonic/AppData/Local/Screeps/scripts/127_0_0_1___21025/main"] }),
     resolve(),
     commonjs(),
     typescript({tsconfig: "./tsconfig.json"}),

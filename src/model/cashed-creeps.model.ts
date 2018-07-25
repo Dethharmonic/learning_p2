@@ -4,11 +4,12 @@ import { CashedCreepsTool } from "tools/cashed-creeps-tool";
 export class CashedCreeps {
     [key: string]: any;
     supportedRoles: CreepRole[];
-    constructor() {
-        this.supportedRoles = CashedCreeps.getSupportedRoles();
+    /*constructor() {
+
         this.initialize();
-    }
+    }*/
     public initialize() {
+        this.supportedRoles = CashedCreeps.getSupportedRoles();
         this.clearCash();
     }
     public getByRole(role: CreepRole): Creep[] {

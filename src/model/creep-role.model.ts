@@ -1,8 +1,8 @@
 export class CreepRole {
     public static readonly HARVESTER1: CreepRole = new CreepRole(1, 'HARVESTER1', [WORK, WORK, CARRY, MOVE]);
-    public static readonly UPGRADER1: CreepRole = new CreepRole(2, 'UPGRADER1', [WORK, CARRY, CARRY, MOVE, MOVE]);
+    public static readonly UPGRADER1: CreepRole = new CreepRole(2, 'UPGRADER1', [WORK, WORK, CARRY, MOVE]);
     public static readonly BUILDER1: CreepRole = new CreepRole(3, 'BUILDER1', [WORK, WORK, CARRY, MOVE]);
-    public static readonly HAULER1: CreepRole = new CreepRole(4, 'HAULER1', [WORK, CARRY, MOVE]);
+    public static readonly HAULER1: CreepRole = new CreepRole(4, 'HAULER1', [WORK, CARRY,CARRY, MOVE,MOVE]);
     //public static readonly SUPPORTEDROLE: CreepRole[] = [CreepRole.HARVESTER1, CreepRole.UPGRADER1, CreepRole.BUILDER1];
     public static getRoleNameByRoleId(roleId: number): string {
         switch (roleId) {
